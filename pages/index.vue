@@ -1,24 +1,41 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        starstablenames
-      </h1>
-      <h2 class="subtitle">
-        Star Stable name list
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
+  <div>
+    <div class="flex flex-col">
+      <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div
+          class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200"
         >
-          GitHub
-        </a>
+          <table class="min-w-full">
+            <thead>
+              <tr>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Name
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(name, index) in names" :class="{'bg-white' : !(index % 2), 'bg-gray-50': index % 2 }">
+                <td
+                  class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
+                >
+                  {{ name.first }} {{ name.last }}
+                </td>
+                <td
+                  class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium"
+                >
+                  <a
+                    href="#"
+                    class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline"
+                    >Edit</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -26,49 +43,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Logo from '~/components/Logo.vue'
+import axios from 'axios'
 
 export default Vue.extend({
-  components: {
-    Logo
+  components: {},
+  data() {
+    return {
+      names: []
+    }
+  },
+  created() {
+    axios.get('/data/names.json').then(({ data }) => {
+      this.names = data.slice(0, 30)
+    })
   }
 })
 </script>
-
-<style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-  @apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
