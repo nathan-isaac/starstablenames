@@ -1,39 +1,8 @@
 import axios from '~/node_modules/axios'
 
-export class Name {
-  private _uid: string
-  private _fullName: string
-  private _firstName: string
-  private _lastName: string
-  static instance: Names
-
-  constructor(
-    uid: string,
-    fullName: string,
-    firstName: string,
-    lastName: string
-  ) {
-    this._uid = uid
-    this._fullName = fullName
-    this._firstName = firstName
-    this._lastName = lastName
-  }
-
-  get lastName(): string {
-    return this._lastName
-  }
-
-  get firstName(): string {
-    return this._firstName
-  }
-
-  get fullName(): string {
-    return this._fullName
-  }
-
-  get uid(): string {
-    return this._uid
-  }
+export interface Name {
+  uid: string
+  fullName: string
 }
 
 export interface NameListGateway {
@@ -44,12 +13,10 @@ export class HttpNameListGateway implements NameListGateway {
   getAll(): Promise<Name[]> {
     return axios.get('/data/names.json').then(({ data }) => {
       return data.slice(0, 30).map((name: any) => {
-        return new Name(
-          name.uid,
-          name.full_name,
-          name.first_name,
-          name.last_name
-        )
+        return {
+          uid: name.uid,
+          fullName: name.full_name
+        }
       })
     })
   }
@@ -124,6 +91,7 @@ export class Names {
   private nameListGateway: NameListGateway
   private likesGateway: LikesGateway
   private usedGateway: UsedGateway
+  static instance: Names
 
   constructor(
     nameListGateway: NameListGateway,
@@ -166,14 +134,14 @@ export class Names {
   }
 
   static make(): Names {
-    if (!Name.instance) {
-      Name.instance = new Names(
+    if (!Names.instance) {
+      Names.instance = new Names(
         new HttpNameListGateway(),
         new InMemoryLikesGateway(),
         new InMemoryUsedGateway()
       )
     }
 
-    return Name.instance
+    return Names.instance
   }
 }
