@@ -28,13 +28,11 @@
             <tbody>
               <NameRow
                 v-for="(name, index) in names"
-                :full-name="name.full_name"
                 :key="name.uid"
-                :uid="name.uid"
-                :liked="true"
-                :used="true"
-                @change="onChange"
+                :name="name"
                 :class="{ 'bg-white': !(index % 2), 'bg-gray-50': index % 2 }"
+                @toggle-like="onToggleLike"
+                @toggle-used="onToggleUsed"
               ></NameRow>
             </tbody>
           </table>
@@ -76,34 +74,32 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import axios from 'axios'
 import InputToggle from '../components/forms/InputToggle.vue'
 import NameRow from '../components/NameRow.vue'
+import { HttpNameListGateway, InMemoryLikesGateway, Names } from '~/src/Names'
 
 export default Vue.extend({
   components: {
     InputToggle,
     NameRow
   },
+  async asyncData(ctx: Context): Promise<object | void> | object | void {
+    const names = Names.make()
+    return await names.load()
+  },
   data() {
     return {
       names: []
     }
   },
-  created() {
-    axios.get('/data/names.json').then(({ data }) => {
-      this.names = data.slice(0, 30)
-    })
-  },
   methods: {
-    onChange(data) {
-      // name preferences
-
-      // name likes
-      // used names
-
-      console.log(data)
+    onToggleLike(uid) {
+      const names = Names.make()
+      names.toggleLike(uid).then((viewModel) => {
+        this.names = viewModel.names
+      })
     },
-  },
+    onToggleUsed(uid) {}
+  }
 })
 </script>

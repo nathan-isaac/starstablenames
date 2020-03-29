@@ -3,17 +3,17 @@
     <td
       class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
     >
-      {{ fullName }}
+      {{ name.fullName }}
     </td>
     <td
       class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium"
     >
-      <InputToggle :value="used" @input="toggleUsed"></InputToggle>
+      <InputToggle :value="name.used" @input="toggleUsed"></InputToggle>
     </td>
     <td
       class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium"
     >
-      <InputToggle :value="liked" @input="toggleLiked"></InputToggle>
+      <InputToggle :value="name.liked" @input="toggleLiked"></InputToggle>
     </td>
   </tr>
 </template>
@@ -28,33 +28,14 @@ export default Vue.extend({
     InputToggle
   },
   props: {
-    fullName: {
-      type: String
-    },
-    uid: {
-      type: String
-    },
-    liked: {
-      type: Boolean
-    },
-    used: {
-      type: Boolean
-    }
+    name: {}
   },
   methods: {
     toggleLiked() {
-      this.$emit('change', {
-        uid: this.uid,
-        liked: !this.liked,
-        used: this.used
-      })
+      this.$emit('toggle-like', this.name.uid);
     },
     toggleUsed() {
-      this.$emit('change', {
-        uid: this.uid,
-        liked: this.liked,
-        used: !this.used
-      })
+      this.$emit('toggle-used', this.name.uid);
     }
   }
 })
