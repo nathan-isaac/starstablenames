@@ -13,28 +13,56 @@
                 >
                   Name
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Used
+                </th>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Like/Dislike
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(name, index) in names" :class="{'bg-white' : !(index % 2), 'bg-gray-50': index % 2 }">
-                <td
-                  class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
-                >
-                  {{ name.first }} {{ name.last }}
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium"
-                >
-                  <a
-                    href="#"
-                    class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline"
-                    >Edit</a
-                  >
-                </td>
-              </tr>
+              <NameRow
+                v-for="(name, index) in names"
+                :name="name"
+                :class="{ 'bg-white': !(index % 2), 'bg-gray-50': index % 2 }"
+              ></NameRow>
             </tbody>
           </table>
+
+          <div
+            class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+          >
+            <div class="hidden sm:block">
+              <p class="text-sm leading-5 text-gray-700">
+                Showing
+                <span class="font-medium">1</span>
+                to
+                <span class="font-medium">10</span>
+                of
+                <span class="font-medium">20</span>
+                results
+              </p>
+            </div>
+            <div class="flex-1 flex justify-between sm:justify-end">
+              <a
+                href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
+              >
+                Previous
+              </a>
+              <a
+                href="#"
+                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
+              >
+                Next
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -44,11 +72,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import axios from 'axios'
+import InputToggle from '../components/forms/InputToggle.vue'
+import NameRow from '../components/NameRow.vue'
 
 export default Vue.extend({
-  components: {},
+  components: {
+    InputToggle,
+    NameRow
+  },
   data() {
     return {
+      value: false,
       names: []
     }
   },
@@ -56,6 +90,11 @@ export default Vue.extend({
     axios.get('/data/names.json').then(({ data }) => {
       this.names = data.slice(0, 30)
     })
+  },
+  methods: {
+    toggle() {
+      this.value = !this.value
+    }
   }
 })
 </script>
