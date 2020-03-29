@@ -99,7 +99,12 @@ export default Vue.extend({
         this.names = viewModel.names
       })
     },
-    onToggleUsed(uid) {}
+    onToggleUsed(uid) {
+      const names = Names.make()
+      names.toggleUsed(uid).then((viewModel) => {
+        this.names = viewModel.names
+      })
+    }
   }
 })
 </script>

@@ -66,33 +66,54 @@ interface ViewModel {
   names: ViewName[]
 }
 
+export interface UsedGateway {
+  isUsed(uid: string): Promise<boolean>
+  toggleUsed(uid: string): Promise<void>
+}
+
+export class InMemoryUsedGateway implements UsedGateway {
+  protected used: Set<string>
+
+  constructor(used: string[] = []) {
+    this.used = new Set<string>(used)
+  }
+
+  isUsed(uid: string): Promise<boolean> {
+    return Promise.resolve(this.used.has(uid))
+  }
+
+  toggleUsed(uid: string): Promise<void> {
+    if (this.used.has(uid)) {
+      this.used.delete(uid)
+    } else {
+      this.used.add(uid)
+    }
+
+    return Promise.resolve()
+  }
+}
+
 export interface LikesGateway {
   hasLike(uid: string): Promise<boolean>
   toggleLike(uid: string): Promise<void>
 }
 
 export class InMemoryLikesGateway implements LikesGateway {
-  protected likes: object
+  protected likes: Set<string>
 
   constructor(likes: string[] = []) {
-    this.likes = {}
-
-    likes.forEach((uid) => {
-      this.likes[uid] = uid
-    })
+    this.likes = new Set(likes)
   }
 
   hasLike(uid: string): Promise<boolean> {
-    const hasLike = !!this.likes[uid]
-
-    return Promise.resolve(hasLike)
+    return Promise.resolve(this.likes.has(uid))
   }
 
   toggleLike(uid: string): Promise<void> {
-    if (this.likes[uid]) {
-      delete this.likes[uid]
+    if (this.likes.has(uid)) {
+      this.likes.delete(uid)
     } else {
-      this.likes[uid] = uid
+      this.likes.add(uid)
     }
 
     return Promise.resolve()
@@ -102,10 +123,16 @@ export class InMemoryLikesGateway implements LikesGateway {
 export class Names {
   private nameListGateway: NameListGateway
   private likesGateway: LikesGateway
+  private usedGateway: UsedGateway
 
-  constructor(nameListGateway: NameListGateway, likesGateway: LikesGateway) {
-    this.likesGateway = likesGateway
+  constructor(
+    nameListGateway: NameListGateway,
+    likesGateway: LikesGateway,
+    usedGateway: UsedGateway
+  ) {
     this.nameListGateway = nameListGateway
+    this.likesGateway = likesGateway
+    this.usedGateway = usedGateway
   }
 
   async load(): Promise<ViewModel> {
@@ -116,7 +143,7 @@ export class Names {
           uid: name.uid,
           fullName: name.fullName,
           liked: await this.likesGateway.hasLike(name.uid),
-          used: true
+          used: await this.usedGateway.isUsed(name.uid)
         }
       })
     )
@@ -132,13 +159,18 @@ export class Names {
     })
   }
 
-  toggleUsed(uid: string): Promise<ViewModel> {}
+  toggleUsed(uid: string): Promise<ViewModel> {
+    return this.usedGateway.toggleUsed(uid).then(() => {
+      return this.load()
+    })
+  }
 
   static make(): Names {
     if (!Name.instance) {
       Name.instance = new Names(
         new HttpNameListGateway(),
-        new InMemoryLikesGateway()
+        new InMemoryLikesGateway(),
+        new InMemoryUsedGateway()
       )
     }
 
