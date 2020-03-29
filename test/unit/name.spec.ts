@@ -1,4 +1,5 @@
-import { Name, NameListGateway, Names } from '~/src/Names'
+import { Names } from '~/src/Names'
+import { Name, NameListGateway } from '~/src/gateways/names'
 
 class NameListGatewaySub implements NameListGateway {
   getAll(): Promise<Name[]> {

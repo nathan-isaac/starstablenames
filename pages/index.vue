@@ -71,7 +71,9 @@
 import Vue from 'vue'
 import InputToggle from '../components/forms/InputToggle.vue'
 import NameRow from '../components/NameRow.vue'
-import { HttpNameListGateway, InMemoryLikesGateway, Names } from '~/src/Names'
+import { Names } from '~/src/Names'
+import { HttpNameListGateway } from '~/src/gateways/names'
+import { InMemoryLikesGateway } from '~/src/gateways/likes'
 
 export default Vue.extend({
   components: {

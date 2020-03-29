@@ -1,26 +1,6 @@
-import axios from '~/node_modules/axios'
-
-export interface Name {
-  uid: string
-  fullName: string
-}
-
-export interface NameListGateway {
-  getAll(): Promise<Name[]>
-}
-
-export class HttpNameListGateway implements NameListGateway {
-  getAll(): Promise<Name[]> {
-    return axios.get('/data/names.json').then(({ data }) => {
-      return data.slice(0, 30).map((name: any) => {
-        return {
-          uid: name.uid,
-          fullName: name.full_name
-        }
-      })
-    })
-  }
-}
+import { HttpNameListGateway, NameListGateway } from '~/src/gateways/names'
+import { InMemoryUsedGateway, UsedGateway } from '~/src/gateways/used'
+import { InMemoryLikesGateway, LikesGateway } from '~/src/gateways/likes'
 
 interface ViewName {
   uid: string
@@ -31,60 +11,6 @@ interface ViewName {
 
 interface ViewModel {
   names: ViewName[]
-}
-
-export interface UsedGateway {
-  isUsed(uid: string): Promise<boolean>
-  toggleUsed(uid: string): Promise<void>
-}
-
-export class InMemoryUsedGateway implements UsedGateway {
-  protected used: Set<string>
-
-  constructor(used: string[] = []) {
-    this.used = new Set<string>(used)
-  }
-
-  isUsed(uid: string): Promise<boolean> {
-    return Promise.resolve(this.used.has(uid))
-  }
-
-  toggleUsed(uid: string): Promise<void> {
-    if (this.used.has(uid)) {
-      this.used.delete(uid)
-    } else {
-      this.used.add(uid)
-    }
-
-    return Promise.resolve()
-  }
-}
-
-export interface LikesGateway {
-  hasLike(uid: string): Promise<boolean>
-  toggleLike(uid: string): Promise<void>
-}
-
-export class InMemoryLikesGateway implements LikesGateway {
-  protected likes: Set<string>
-
-  constructor(likes: string[] = []) {
-    this.likes = new Set(likes)
-  }
-
-  hasLike(uid: string): Promise<boolean> {
-    return Promise.resolve(this.likes.has(uid))
-  }
-
-  toggleLike(uid: string): Promise<void> {
-    if (this.likes.has(uid)) {
-      this.likes.delete(uid)
-    } else {
-      this.likes.add(uid)
-    }
-
-    return Promise.resolve()
-  }
 }
 
 export class Names {
