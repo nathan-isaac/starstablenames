@@ -38,11 +38,11 @@
             <div class="hidden sm:block">
               <p class="text-sm leading-5 text-gray-700">
                 Showing
-                <span class="font-medium">1</span>
+                <span class="font-medium">{{ pagination.offsetStart }}</span>
                 to
-                <span class="font-medium">10</span>
+                <span class="font-medium">{{ pagination.offsetEnd }}</span>
                 of
-                <span class="font-medium">20</span>
+                <span class="font-medium">{{ pagination.totalPages }}</span>
                 results
               </p>
             </div>
@@ -50,12 +50,14 @@
               <a
                 href="#"
                 class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
+                @click.prevent="previousPage"
               >
                 Previous
               </a>
               <a
                 href="#"
                 class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
+                @click.prevent="nextPage"
               >
                 Next
               </a>
@@ -72,8 +74,6 @@ import Vue from 'vue'
 import InputToggle from '../components/forms/InputToggle.vue'
 import NameRow from '../components/NameRow.vue'
 import { Names } from '~/src/Names'
-import { HttpNameListGateway } from '~/src/gateways/names'
-import { InMemoryLikesGateway } from '~/src/gateways/likes'
 
 export default Vue.extend({
   components: {
@@ -86,7 +86,15 @@ export default Vue.extend({
   },
   data() {
     return {
-      names: []
+      names: [],
+      pagination: {
+        nextPage: 0,
+        previousPage: 0,
+        currentPage: 0,
+        totalPages: 0,
+        offsetStart: 0,
+        offsetEnd: 0,
+      }
     }
   },
   methods: {
@@ -100,6 +108,20 @@ export default Vue.extend({
       const names = Names.make()
       names.toggleUsed(uid).then((viewModel) => {
         this.names = viewModel.names
+      })
+    },
+    previousPage() {
+      const names = Names.make()
+      names.load(this.pagination.previousPage).then((viewModel) => {
+        this.names = viewModel.names
+        this.pagination = viewModel.pagination
+      })
+    },
+    nextPage() {
+      const names = Names.make()
+      names.load(this.pagination.nextPage).then((viewModel) => {
+        this.names = viewModel.names
+        this.pagination = viewModel.pagination
       })
     }
   }

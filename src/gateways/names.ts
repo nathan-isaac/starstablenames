@@ -12,7 +12,7 @@ export interface NameListGateway {
 export class HttpNameListGateway implements NameListGateway {
   getAll(): Promise<Name[]> {
     return axios.get('/data/names.json').then(({ data }) => {
-      return data.slice(0, 30).map((name: any) => {
+      return data.map((name: any) => {
         return {
           uid: name.uid,
           fullName: name.full_name
