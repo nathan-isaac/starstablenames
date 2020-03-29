@@ -20,7 +20,7 @@
 export default {
   name: 'InputToggle',
   props: {
-    value: {},
+    value: {}
   },
   methods: {
     toggle() {

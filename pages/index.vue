@@ -71,43 +71,46 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import InputToggle from '../components/forms/InputToggle.vue'
-import NameRow from '../components/NameRow.vue'
+import InputToggle from '@/components/forms/InputToggle.vue'
+import NameRow from '@/components/NameRow.vue'
 import { Names } from '~/src/Names'
+import { Name } from '~/src/gateways/names'
 
 export default Vue.extend({
   components: {
     InputToggle,
     NameRow
   },
-  async asyncData(ctx: Context): Promise<object | void> | object | void {
+  async asyncData() {
     const names = Names.make()
     return await names.load()
   },
   data() {
     return {
-      names: [],
+      names: [] as Name[],
       pagination: {
         nextPage: 0,
         previousPage: 0,
         currentPage: 0,
         totalPages: 0,
         offsetStart: 0,
-        offsetEnd: 0,
+        offsetEnd: 0
       }
     }
   },
   methods: {
-    onToggleLike(uid) {
+    onToggleLike(uid: string) {
       const names = Names.make()
       names.toggleLike(uid).then((viewModel) => {
         this.names = viewModel.names
+        this.pagination = viewModel.pagination
       })
     },
-    onToggleUsed(uid) {
+    onToggleUsed(uid: string) {
       const names = Names.make()
       names.toggleUsed(uid).then((viewModel) => {
         this.names = viewModel.names
+        this.pagination = viewModel.pagination
       })
     },
     previousPage() {

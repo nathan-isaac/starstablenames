@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import InputToggle from './forms/InputToggle'
+import InputToggle from '@/components/forms/InputToggle.vue'
 
 export default Vue.extend({
   name: 'NameRow',
@@ -30,14 +30,16 @@ export default Vue.extend({
     InputToggle
   },
   props: {
-    name: {}
+    name: {
+      type: Object
+    }
   },
   methods: {
     toggleLiked() {
-      this.$emit('toggle-like', this.name.uid);
+      this.$emit('toggle-like', this.name.uid)
     },
     toggleUsed() {
-      this.$emit('toggle-used', this.name.uid);
+      this.$emit('toggle-used', this.name.uid)
     }
   }
 })

@@ -3,16 +3,8 @@ import {
   Name,
   NameListGateway
 } from '~/src/gateways/names'
-import {
-  InMemoryUsedGateway,
-  LocalStorageUsedGateway,
-  UsedGateway
-} from '~/src/gateways/used'
-import {
-  InMemoryLikesGateway,
-  LikesGateway,
-  LocalStorageLikesGateway
-} from '~/src/gateways/likes'
+import { LocalStorageUsedGateway, UsedGateway } from '~/src/gateways/used'
+import { LikesGateway, LocalStorageLikesGateway } from '~/src/gateways/likes'
 
 interface ViewName {
   uid: string
@@ -23,12 +15,14 @@ interface ViewName {
 
 interface ViewModel {
   names: ViewName[]
-}
-
-interface Page {
-  startIndex: number
-  endIndex: number
-  numberOfPages: number
+  pagination: {
+    currentPage: number
+    previousPage: number
+    nextPage: number
+    totalPages: number
+    offsetStart: number
+    offsetEnd: number
+  }
 }
 
 export class Names {
@@ -46,19 +40,17 @@ export class Names {
     this.nameListGateway = nameListGateway
     this.likesGateway = likesGateway
     this.usedGateway = usedGateway
+    this.allNames = []
   }
 
   async load(page: number = 1): Promise<ViewModel> {
-    console.log(page)
     this.allNames = await this.nameListGateway.getAll()
 
     const itemLength = this.allNames.length
     const itemsPerPage = 10
 
     const numberOfPages = Math.round(itemLength / itemsPerPage)
-    const offset = (page - 1) * itemsPerPage + 1;
-
-    console.log(offset, offset + itemsPerPage - 1)
+    const offset = (page - 1) * itemsPerPage + 1
 
     const names = await Promise.all(
       this.allNames
