@@ -28,7 +28,12 @@
             <tbody>
               <NameRow
                 v-for="(name, index) in names"
-                :name="name"
+                :full-name="name.full_name"
+                :key="name.uid"
+                :uid="name.uid"
+                :liked="true"
+                :used="true"
+                @change="onChange"
                 :class="{ 'bg-white': !(index % 2), 'bg-gray-50': index % 2 }"
               ></NameRow>
             </tbody>
@@ -82,7 +87,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      value: false,
       names: []
     }
   },
@@ -92,9 +96,14 @@ export default Vue.extend({
     })
   },
   methods: {
-    toggle() {
-      this.value = !this.value
-    }
-  }
+    onChange(data) {
+      // name preferences
+
+      // name likes
+      // used names
+
+      console.log(data)
+    },
+  },
 })
 </script>
