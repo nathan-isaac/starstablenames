@@ -26,11 +26,12 @@ interface ViewModel {
 }
 
 export class Names {
+  static instance: Names
   private nameListGateway: NameListGateway
   private likesGateway: LikesGateway
   private usedGateway: UsedGateway
   private allNames: Name[]
-  static instance: Names
+  private currentPage: number
 
   constructor(
     nameListGateway: NameListGateway,
@@ -41,9 +42,12 @@ export class Names {
     this.likesGateway = likesGateway
     this.usedGateway = usedGateway
     this.allNames = []
+    this.currentPage = 1
   }
 
   async load(page: number = 1): Promise<ViewModel> {
+    this.currentPage = page
+
     this.allNames = await this.nameListGateway.getAll()
 
     const itemLength = this.allNames.length
@@ -80,13 +84,13 @@ export class Names {
 
   toggleLike(uid: string): Promise<ViewModel> {
     return this.likesGateway.toggleLike(uid).then(() => {
-      return this.load()
+      return this.load(this.currentPage)
     })
   }
 
   toggleUsed(uid: string): Promise<ViewModel> {
     return this.usedGateway.toggleUsed(uid).then(() => {
-      return this.load()
+      return this.load(this.currentPage)
     })
   }
 
