@@ -59,7 +59,7 @@
 import Vue from 'vue'
 import { mdiHeartOutline, mdiHeart } from '@mdi/js'
 import AppTable from '~/components/table/AppTable.vue'
-import { Names } from '~/src/Names'
+import { Names, ViewModel } from '~/src/Names'
 import { Name } from '~/src/gateways/names'
 import TableHead from '~/components/table/TableHead.vue'
 import TableRow from '~/components/table/TableRow.vue'
@@ -86,10 +86,6 @@ export default Vue.extend({
     EdgeToEdgeCard,
     InputIconToggle
   },
-  async asyncData() {
-    const names = Names.make()
-    return await names.load()
-  },
   data() {
     return {
       mdiHeart,
@@ -105,33 +101,38 @@ export default Vue.extend({
       }
     }
   },
+  async created() {
+    const names = Names.make()
+    const viewModel = await names.load()
+    this.setViewModel(viewModel)
+  },
   methods: {
+    setViewModel(viewModel: ViewModel) {
+      this.names = viewModel.names
+      this.pagination = viewModel.pagination
+    },
     onToggleLike(uid: string) {
       const names = Names.make()
       names.toggleLike(uid).then((viewModel) => {
-        this.names = viewModel.names
-        this.pagination = viewModel.pagination
+        this.setViewModel(viewModel)
       })
     },
     onToggleUsed(uid: string) {
       const names = Names.make()
       names.toggleUsed(uid).then((viewModel) => {
-        this.names = viewModel.names
-        this.pagination = viewModel.pagination
+        this.setViewModel(viewModel)
       })
     },
     previousPage() {
       const names = Names.make()
       names.load(this.pagination.previousPage).then((viewModel) => {
-        this.names = viewModel.names
-        this.pagination = viewModel.pagination
+        this.setViewModel(viewModel)
       })
     },
     nextPage() {
       const names = Names.make()
       names.load(this.pagination.nextPage).then((viewModel) => {
-        this.names = viewModel.names
-        this.pagination = viewModel.pagination
+        this.setViewModel(viewModel)
       })
     }
   }

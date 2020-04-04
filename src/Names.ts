@@ -13,7 +13,7 @@ interface ViewName {
   used: boolean
 }
 
-interface ViewModel {
+export interface ViewModel {
   names: ViewName[]
   pagination: {
     currentPage: number
