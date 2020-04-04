@@ -20,10 +20,12 @@
           >
             <TableCell>
               <div class="flex">
-                <InputToggle
+                <InputToggleWithIcon
+                  :start-icon="mdiHeartOutline"
+                  :end-icon="mdiHeart"
                   :value="name.liked"
-                  @input="onToggleLike"
-                ></InputToggle>
+                  @input="onToggleLike(name.uid)"
+                ></InputToggleWithIcon>
                 <span class="inline-block ml-5 text-2xl">
                   {{ name.fullName }}
                 </span>
@@ -31,10 +33,10 @@
             </TableCell>
             <TableCell>
               <div class="flex justify-center">
-                <InputToggle
+                <InputToggleWithIcon
                   :value="name.used"
-                  @input="onToggleUsed"
-                ></InputToggle>
+                  @input="onToggleUsed(name.uid)"
+                ></InputToggleWithIcon>
               </div>
             </TableCell>
           </TableRow>
@@ -55,6 +57,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mdiHeartOutline, mdiHeart } from '@mdi/js'
 import AppTable from '~/components/table/AppTable.vue'
 import { Names } from '~/src/Names'
 import { Name } from '~/src/gateways/names'
@@ -62,11 +65,11 @@ import TableHead from '~/components/table/TableHead.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableHeadCell from '~/components/table/TableHeadCell.vue'
 import TableBody from '~/components/table/TableBody.vue'
-import InputToggle from '~/components/forms/InputToggle.vue'
 import TableCell from '~/components/table/TableCell.vue'
 import SimpleCardPagination from '~/components/pagination/SimpleCardPagination.vue'
 import FullWidthOnMobileContainer from '~/components/container/FullWidthOnMobileContainer.vue'
 import EdgeToEdgeCard from '~/components/card/EdgeToEdgeCard.vue'
+import InputToggleWithIcon from '~/components/forms/toggles/InputToggleWithIcon.vue'
 
 export default Vue.extend({
   components: {
@@ -75,7 +78,7 @@ export default Vue.extend({
     TableBody,
     TableRow,
     TableHeadCell,
-    InputToggle,
+    InputToggleWithIcon,
     TableCell,
     SimpleCardPagination,
     FullWidthOnMobileContainer,
@@ -87,6 +90,8 @@ export default Vue.extend({
   },
   data() {
     return {
+      mdiHeart,
+      mdiHeartOutline,
       names: [] as Name[],
       pagination: {
         nextPage: 0,
