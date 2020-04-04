@@ -1,7 +1,11 @@
 <template>
   <FullWidthOnMobileContainer>
     <EdgeToEdgeCard>
-      <AppTable>
+      <div class="m-10 flex justify-center" v-if="loading">
+        <LoadingSpinner class="h-10 w-10"></LoadingSpinner>
+      </div>
+
+      <AppTable v-if="!loading">
         <TableHead>
           <TableRow>
             <TableHeadCell>
@@ -44,6 +48,7 @@
       </AppTable>
 
       <SimpleCardPagination
+        v-if="!loading"
         :results-start="pagination.offsetStart"
         :results-end="pagination.offsetEnd"
         :results-total="pagination.totalPages"
@@ -57,7 +62,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mdiHeartOutline, mdiHeart } from '@mdi/js'
+import { mdiHeartOutline, mdiHeart, mdiLoading } from '@mdi/js'
 import AppTable from '~/components/table/AppTable.vue'
 import { Names, ViewModel } from '~/src/Names'
 import { Name } from '~/src/gateways/names'
@@ -71,6 +76,8 @@ import FullWidthOnMobileContainer from '~/components/container/FullWidthOnMobile
 import EdgeToEdgeCard from '~/components/card/EdgeToEdgeCard.vue'
 import InputToggleWithIcon from '~/components/forms/toggles/InputToggleWithIcon.vue'
 import InputIconToggle from '~/components/forms/toggles/InputIconToggle.vue'
+import SvgIcon from '~/components/icons/SvgIcon.vue'
+import LoadingSpinner from '~/components/icons/LoadingSpinner.vue'
 
 export default Vue.extend({
   components: {
@@ -84,12 +91,16 @@ export default Vue.extend({
     SimpleCardPagination,
     FullWidthOnMobileContainer,
     EdgeToEdgeCard,
-    InputIconToggle
+    InputIconToggle,
+    SvgIcon,
+    LoadingSpinner
   },
   data() {
     return {
       mdiHeart,
       mdiHeartOutline,
+      mdiLoading,
+      loading: true,
       names: [] as Name[],
       pagination: {
         nextPage: 0,
@@ -102,9 +113,11 @@ export default Vue.extend({
     }
   },
   async created() {
+    this.loading = true
     const names = Names.make()
     const viewModel = await names.load()
     this.setViewModel(viewModel)
+    this.loading = false
   },
   methods: {
     setViewModel(viewModel: ViewModel) {
