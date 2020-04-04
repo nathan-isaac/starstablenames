@@ -7,7 +7,7 @@
             <TableHeadCell>
               Name
             </TableHeadCell>
-            <TableHeadCell>
+            <TableHeadCell class="text-center">
               Used
             </TableHeadCell>
           </TableRow>
@@ -20,12 +20,12 @@
           >
             <TableCell>
               <div class="flex">
-                <InputToggleWithIcon
+                <InputIconToggle
                   :start-icon="mdiHeartOutline"
                   :end-icon="mdiHeart"
                   :value="name.liked"
                   @input="onToggleLike(name.uid)"
-                ></InputToggleWithIcon>
+                ></InputIconToggle>
                 <span class="inline-block ml-5 text-2xl">
                   {{ name.fullName }}
                 </span>
@@ -70,6 +70,7 @@ import SimpleCardPagination from '~/components/pagination/SimpleCardPagination.v
 import FullWidthOnMobileContainer from '~/components/container/FullWidthOnMobileContainer.vue'
 import EdgeToEdgeCard from '~/components/card/EdgeToEdgeCard.vue'
 import InputToggleWithIcon from '~/components/forms/toggles/InputToggleWithIcon.vue'
+import InputIconToggle from '~/components/forms/toggles/InputIconToggle.vue'
 
 export default Vue.extend({
   components: {
@@ -82,7 +83,8 @@ export default Vue.extend({
     TableCell,
     SimpleCardPagination,
     FullWidthOnMobileContainer,
-    EdgeToEdgeCard
+    EdgeToEdgeCard,
+    InputIconToggle
   },
   async asyncData() {
     const names = Names.make()
