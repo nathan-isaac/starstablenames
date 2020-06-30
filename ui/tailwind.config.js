@@ -1,5 +1,6 @@
 module.exports = {
+  purge: ["./src/**/*.vue"],
   theme: {},
   variants: {},
-  plugins: [require('@tailwindcss/ui')]
-}
+  plugins: [require("@tailwindcss/ui")]
+};
