@@ -36,12 +36,12 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { mdiClose, mdiCheck } from '@mdi/js'
-import SvgIcon from '~/components/icons/SvgIcon'
+import Vue from "vue";
+import { mdiClose, mdiCheck } from "@mdi/js";
+import SvgIcon from "@/components/icons/SvgIcon";
 
 export default Vue.extend({
-  name: 'InputToggleWithIcon',
+  name: "InputToggleWithIcon",
   components: {
     SvgIcon
   },
@@ -51,19 +51,19 @@ export default Vue.extend({
     },
     startIcon: {
       default() {
-        return mdiClose
+        return mdiClose;
       }
     },
     endIcon: {
       default() {
-        return mdiCheck
+        return mdiCheck;
       }
     }
   },
   methods: {
     toggle() {
-      this.$emit('input', !this.value)
+      this.$emit("input", !this.value);
     }
   }
-})
+});
 </script>

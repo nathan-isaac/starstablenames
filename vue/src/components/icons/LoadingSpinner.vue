@@ -3,21 +3,21 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { mdiLoading } from '@mdi/js'
-import SvgIcon from '~/components/icons/SvgIcon'
+import Vue from "vue";
+import { mdiLoading } from "@mdi/js";
+import SvgIcon from "@/components/icons/SvgIcon";
 
 export default Vue.extend({
-  name: 'LoadingSpinner',
+  name: "LoadingSpinner",
   components: {
     SvgIcon
   },
   data() {
     return {
       mdiLoading
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

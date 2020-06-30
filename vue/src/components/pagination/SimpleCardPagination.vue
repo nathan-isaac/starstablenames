@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'SimpleCardPagination',
+  name: "SimpleCardPagination",
   props: {
     resultsStart: {
       type: Number
@@ -48,5 +48,5 @@ export default Vue.extend({
       type: Number
     }
   }
-})
+});
 </script>

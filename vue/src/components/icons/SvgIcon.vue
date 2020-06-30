@@ -7,18 +7,18 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'SvgIcon',
+  name: "SvgIcon",
   props: {
     path: String,
     color: {
       type: String,
-      default: 'currentColor'
+      default: "currentColor"
     },
     title: String,
     description: String
   }
-})
+});
 </script>

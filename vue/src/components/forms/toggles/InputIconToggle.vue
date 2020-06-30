@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import SvgIcon from '~/components/icons/SvgIcon'
+import Vue from "vue";
+import SvgIcon from "@/components/icons/SvgIcon";
 
 export default Vue.extend({
-  name: 'InputIconToggle',
+  name: "InputIconToggle",
   components: {
     SvgIcon
   },
@@ -30,24 +30,24 @@ export default Vue.extend({
     value: {},
     startIcon: {
       default() {
-        return mdiCircle
+        return mdiCircle;
       }
     },
     endIcon: {
       default() {
-        return mdiCircle
+        return mdiCircle;
       }
     }
   },
   computed: {
     iconPath() {
-      return this.value ? this.endIcon : this.startIcon
+      return this.value ? this.endIcon : this.startIcon;
     }
   },
   methods: {
     toggle() {
-      this.$emit('input', !this.value)
+      this.$emit("input", !this.value);
     }
   }
-})
+});
 </script>
