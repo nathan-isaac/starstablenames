@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { NameGateway, Sqlite3NameGateway } from '../../src/storage/name'
+import { ColumnName, NameGateway, QueryOrder, Sqlite3NameGateway } from '../../src/storage/name'
 import { Database } from 'sqlite3'
 
 describe('Sqlite3NameGateway', function () {
@@ -54,5 +54,21 @@ describe('Sqlite3NameGateway', function () {
       assert.strictEqual(names.length, 2);
     });
   });
+
+  describe('getPaginated()', function() {
+    it('should get no results by default', async () => {
+      const names = nameGateway.getPaginated(1, 1, ColumnName.name, QueryOrder.descending);
+
+      // assert.strictEqual()
+    })
+  })
 });
 
+// id, first, last, liked, used, created_at, updated_at
+
+// name is unique
+// a name can have multiple types
+// a group of names can be liked or marked a used/taken
+
+// name: id, name, search_name, is_first, is_last
+// combined_name: id, first_name_id, last_name_id, liked, used, created_at, updated_at

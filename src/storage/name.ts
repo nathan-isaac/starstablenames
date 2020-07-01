@@ -2,13 +2,13 @@ import { Database } from 'sqlite3'
 
 type NameId = string
 
-enum ColumnName {
+export enum ColumnName {
   name,
   liked,
   used
 }
 
-enum QueryOrder {
+export enum QueryOrder {
   ascending,
   descending
 }
